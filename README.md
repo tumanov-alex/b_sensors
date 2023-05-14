@@ -13,7 +13,7 @@ npm install && npm start
 From the `/client` directory
 
 ```bash
-npm install && npm run preview
+npm install && npm run build && npm run preview
 ```
 
 ## Questions
