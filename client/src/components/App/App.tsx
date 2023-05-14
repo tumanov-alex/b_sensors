@@ -4,7 +4,7 @@ import SensorToggle from '../SensorToggle/SensorToggle.tsx';
 import Sensor from '../Sensor/Sensor.tsx';
 import { getColor } from '../../utils/getColor.ts';
 
-import './App.css';
+import './App.scss';
 import { getSorted } from '../../utils/getSortedSensors.ts';
 
 export interface SensorData {

@@ -1,3 +1,5 @@
+@use '../../constants/variables';
+
 .toggle-container {
   display: inline-flex;
   justify-content: space-between;
@@ -6,9 +8,9 @@
   top: 0;
   z-index: 2147483647;
   width: 100%;
-  background-color: white;
   margin-bottom: 50px;
   padding-top: 20px;
+  background: variables.$darkBackground0;
 }
 
 .sensor-toggle-container {
@@ -27,8 +29,8 @@
   width: 150px;
   height: 100px;
   color: white;
-  background-color: rgba(0, 0, 0, 1);
-  border: 1px solid #e0e0e0;
+  background-color: variables.$darkBackground2;
+  border: 1px solid variables.$light;
   border-radius: 5px;
   box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.1);
   cursor: pointer;
@@ -36,7 +38,7 @@
   transition: all 0.3s ease-in-out;
 
   &.active {
-    background: rgba(0, 0, 0, 0.6);
+    background: variables.$darkBackground1;
   }
 
   @media screen and (max-width: 480px) {

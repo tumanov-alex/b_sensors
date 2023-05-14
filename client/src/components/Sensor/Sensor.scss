@@ -1,3 +1,5 @@
+@use '../../constants/variables';
+
 .chart-container {
   flex: 0 0 49%;
   position: relative;
@@ -6,10 +8,11 @@
   width: 100%;
   margin-bottom: 50px;
   transition: opacity 0.3s ease-in-out, height 0.3s step-start;
+  color: variables.$light;
 
   .icon {
-    width: 60px;
-    height: 60px;
+    width: 90px;
+    height: 90px;
   }
 
   @media (max-width: 1024px) {
@@ -30,7 +33,10 @@
 }
 
 .no-data-message {
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
   font-size: 25px;
   position: absolute;
   top: 50%;

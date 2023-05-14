@@ -3,6 +3,7 @@ import HighchartsReact from 'highcharts-react-official';
 import * as Highcharts from 'highcharts';
 
 import { NoData } from '../NoData/NoData.tsx';
+import { cssColors } from '../../constants/colors.ts';
 import type { SensorData } from '../App/App.tsx';
 import './Sensor.scss';
 
@@ -49,11 +50,12 @@ function Sensor({
       title: {
         text: titleText,
         style: {
-          color: '#555',
+          color: cssColors.light,
         },
       },
       chart: {
         type: 'area',
+        backgroundColor: cssColors.darkBackground0,
       },
       xAxis: {
         labels: {
@@ -67,6 +69,11 @@ function Sensor({
           text: null,
         },
         type: 'logarithmic',
+        labels: {
+          style: {
+            color: cssColors.light,
+          },
+        },
       },
       plotOptions: {
         area: {
@@ -94,17 +101,15 @@ function Sensor({
     [sensorValues]
   );
 
-  const hasNumbers = sensorValues.some(
-    item => typeof item === 'number' && !isNaN(item)
+  const hasNumbers = useMemo(
+    () => sensorValues.some(item => typeof item === 'number' && !isNaN(item)),
+    [sensorValues]
   );
 
   return (
     <div className={chartContainerClassName}>
       <div className="chart">
-        <HighchartsReact
-          highcharts={Highcharts}
-          options={options}
-        />
+        <HighchartsReact highcharts={Highcharts} options={options} />
         <NoData hasNumbers={hasNumbers} />
       </div>
     </div>

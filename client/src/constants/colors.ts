@@ -6,3 +6,8 @@ export const colors = [
   '#CCFF00',
   '#CC3300',
 ];
+
+export const cssColors = {
+  light: '#e4e6eb',
+  darkBackground0: '#121212',
+};
