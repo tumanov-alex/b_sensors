@@ -56,14 +56,17 @@ export default function App() {
         hideDisconnectedSensors && !activeSensorIds.includes(sensorId);
 
       return (
-        <Sensor
-          key={sensorId}
-          sensors={sensors}
-          color={colorMapping[sensorId]}
-          isHidden={isHidden}
-          unit={sensors[0].unit}
-          name={sensors[0].name}
-        />
+        <>
+            <Sensor
+                key={sensorId}
+                sensors={sensors}
+                color={colorMapping[sensorId]}
+                isHidden={isHidden}
+                unit={sensors[0].unit}
+                name={sensors[0].name}
+            />
+            <div></div>
+        </>
       );
     },
     [hideDisconnectedSensors, activeSensorIds]
@@ -75,7 +78,7 @@ export default function App() {
   );
 
   useEffect(() => {
-    webSocket.current = new WebSocket('ws://localhost:3000');
+    webSocket.current = new WebSocket('ws://localhost:5000');
 
     webSocket.current.onopen = () => {
       console.log('Connected to server');
