@@ -19,6 +19,23 @@ body {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+
+  .no-charts {
+    height: 300px;
+    display: flex;
+    align-items: center;
+    font-size: 25px;
+    color: variables.$light;
+    opacity: 1;
+    transition: opacity 0.2s ease-in-out, height 0.2s step-start;
+
+    &.hidden {
+      opacity: 0;
+      height: 0;
+      overflow: hidden;
+      transition-timing-function: ease-in-out, step-end;
+    }
+  }
 }
 
 .highcharts-credits {

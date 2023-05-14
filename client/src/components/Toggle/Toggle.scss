@@ -5,7 +5,7 @@
   width: 150px;
   height: 60px;
   border-radius: 5px;
-  background-color: #f0f0f0;
+  background-color: #444;
   overflow: hidden;
   margin-left: 20px;
 
@@ -14,14 +14,14 @@
     width: 100px;
     border: none;
     background-color: transparent;
-    color: #444;
+    color: #fff;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.3s ease-in-out;
     font-size: 16px;
   }
 
   .active {
-    background-color: #444;
-    color: #fff;
+    background-color: #f0f0f0;
+    color: #444;
   }
 }

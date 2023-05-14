@@ -5,32 +5,22 @@ interface ToggleProps {
   onClick: () => void;
 }
 const Toggle: React.FC<ToggleProps> = ({ onClick }) => {
-  const [active, setActive] = useState<'see all' | 'see active'>('see all');
+  const [isLeftActive, setIsLeftActive] = useState(true);
 
-  const onSeeAllClick = useCallback(() => {
-    setActive('see all');
-    onClick();
-  }, []);
-  const onSeeActiveClick = useCallback(() => {
-    setActive('see active');
+  const onToggle = useCallback(() => {
+    setIsLeftActive(prevState => !prevState);
     onClick();
   }, []);
 
   return (
     <div className="toggle">
-      <button
-        className={active === 'see all' ? 'active' : ''}
-        onClick={onSeeAllClick}
-      >
+      <button className={isLeftActive ? 'active' : ''} onClick={onToggle}>
         See
         <br />
         All
       </button>
 
-      <button
-        className={active === 'see active' ? 'active' : ''}
-        onClick={onSeeActiveClick}
-      >
+      <button className={isLeftActive ? '' : 'active'} onClick={onToggle}>
         See
         <br />
         Active

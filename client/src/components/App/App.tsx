@@ -56,17 +56,14 @@ export default function App() {
         hideDisconnectedSensors && !activeSensorIds.includes(sensorId);
 
       return (
-        <>
-            <Sensor
-                key={sensorId}
-                sensors={sensors}
-                color={colorMapping[sensorId]}
-                isHidden={isHidden}
-                unit={sensors[0].unit}
-                name={sensors[0].name}
-            />
-            <div></div>
-        </>
+        <Sensor
+          key={sensorId}
+          sensors={sensors}
+          color={colorMapping[sensorId]}
+          isHidden={isHidden}
+          unit={sensors[0].unit}
+          name={sensors[0].name}
+        />
       );
     },
     [hideDisconnectedSensors, activeSensorIds]
@@ -75,6 +72,16 @@ export default function App() {
   const sortedSensorDataState = useMemo(
     () => getSorted(sensorDataState),
     [sensorDataState]
+  );
+  const chartHiddenMessageStyle = useMemo(
+    () =>
+      `no-charts ${
+        (!hideDisconnectedSensors && activeSensorIds.length === 0) ||
+        activeSensorIds.length > 0
+          ? 'hidden'
+          : ''
+      }`,
+    [hideDisconnectedSensors, activeSensorIds]
   );
 
   useEffect(() => {
@@ -128,6 +135,8 @@ export default function App() {
       />
 
       <div className="sensor-container">
+        <div className={chartHiddenMessageStyle}>CHARTS HIDDEN</div>
+
         {sortedSensorDataState.map(renderSensorCharts)}
       </div>
     </>
