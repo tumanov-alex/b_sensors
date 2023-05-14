@@ -1,4 +1,4 @@
-import { memo, useEffect, useMemo, useRef, useState } from 'react';
+import { memo, useMemo } from 'react';
 import HighchartsReact from 'highcharts-react-official';
 import * as Highcharts from 'highcharts';
 
@@ -7,128 +7,108 @@ import type { SensorData } from '../App/App.tsx';
 import './Sensor.scss';
 
 interface SensorProps {
-    sensors: SensorData[];
-    showLast?: number;
-    color: string;
-    isHidden: boolean;
+  sensors: SensorData[];
+  showLast?: number;
+  color: string;
+  isHidden: boolean;
+  unit: string;
+  name: string;
 }
 
-function Sensor({ sensors, showLast = 50, color, isHidden }: SensorProps) {
-    const [sensorData, setSensorData] = useState<number[]>([]);
-    const lastSensorData = useRef<SensorData | null>(null);
-    const chartRef = useRef<any>(null);
-    const maxYAxisValue = useRef(0);
-    const minYAxisValue = useRef(Infinity);
-    const [sensorTitles, setSensorTitles] = useState({
-        name: 'Sensor',
-        unit: 'Unit',
-    });
-    const maxValueDelta = useRef(0);
-    const yAxis = useRef<any>(null);
-    const chartContainerClassName = useMemo(() => `chart-container ${isHidden ? 'hidden' : ''}`, [isHidden]);
+function Sensor({
+  sensors,
+  showLast = 50,
+  color,
+  isHidden,
+  unit,
+  name,
+}: SensorProps) {
+  const chartContainerClassName = useMemo(
+    () => `chart-container ${isHidden ? 'hidden' : ''}`,
+    [isHidden]
+  );
 
-    const titleText = useMemo(() => {
-        if (sensorTitles.name === sensorTitles.unit) {
-            return sensorTitles.name;
-        } else {
-            return `${sensorTitles.name}, ${sensorTitles.unit}`;
-        }
-    }, [sensorTitles]);
+  const titleText = useMemo(() => {
+    if (name === unit) {
+      return name;
+    } else {
+      return `${name}, ${unit}`;
+    }
+  }, [unit, name]);
 
-    useEffect(() => {
-        lastSensorData.current = sensors[sensors.length - 1];
+  const sensorValues = useMemo(
+    () =>
+      Object.values(sensors)
+        .map(item => parseFloat(item.value))
+        .slice(-showLast),
+    [sensors, showLast]
+  );
 
-        if (sensorTitles.name === 'Sensor') {
-            setSensorTitles({
-                name: lastSensorData.current.name,
-                unit: lastSensorData.current.unit,
-            });
-        }
-
-        const lastSensorValue = parseFloat(lastSensorData.current.value);
-
-        if (sensorData.length > 0) {
-            maxValueDelta.current = Math.max(maxValueDelta.current, Math.abs(lastSensorValue - sensorData[sensorData.length - 1]));
-        }
-
-        yAxis.current = yAxis.current || chartRef.current.chart.yAxis[0];
-        const ceilLastSensorValue = Math.ceil(lastSensorValue);
-        const floorLastSensorValue = Math.floor(lastSensorValue);
-
-        if (ceilLastSensorValue > maxYAxisValue.current) {
-            maxYAxisValue.current = ceilLastSensorValue;
-            yAxis.current.update({ max: ceilLastSensorValue });
-        }
-
-        if (floorLastSensorValue < minYAxisValue.current) {
-            minYAxisValue.current = floorLastSensorValue;
-            yAxis.current.update({ min: floorLastSensorValue });
-        }
-
-        setSensorData((prevState) => {
-            const newSensorData = [...prevState, lastSensorValue];
-            return newSensorData.length > showLast ? newSensorData.slice(-showLast) : newSensorData;
-        });
-    }, [sensors, maxYAxisValue, minYAxisValue]);
-
-    const options = {
+  const options = useMemo(
+    () => ({
+      title: {
+        text: titleText,
+        style: {
+          color: '#555',
+        },
+      },
+      chart: {
+        type: 'area',
+      },
+      xAxis: {
+        labels: {
+          enabled: false,
+        },
+        tickLength: 0,
+        lineWidth: 0,
+      },
+      yAxis: {
         title: {
-            text: titleText,
-            style: {
-                color: '#555',
-            },
+          text: null,
         },
-        chart: {
-            type: 'area',
+        type: 'logarithmic',
+      },
+      plotOptions: {
+        area: {
+          color: color,
         },
-        xAxis: {
-            labels: {
-                enabled: false,
-            },
-            tickLength: 0,
-            lineWidth: 0,
+        series: {
+          showInLegend: false,
+          enableMouseTracking: false,
+          marker: {
+            enabled: false,
+          },
         },
-        yAxis: {
-            title: {
-                text: null,
-            },
-            type: 'logarithmic',
+        line: {
+          marker: {
+            enabled: false,
+          },
         },
-        plotOptions: {
-            area: {
-                color: color,
-            },
-            series: {
-                showInLegend: false,
-                enableMouseTracking: false,
-                marker: {
-                    enabled: false,
-                },
-            },
-            line: {
-                marker: {
-                    enabled: false,
-                },
-            },
+      },
+      series: [
+        {
+          data: sensorValues,
         },
-        series: [
-            {
-                data: sensorData,
-            },
-        ],
-    };
+      ],
+    }),
+    [sensorValues]
+  );
 
-    const hasNumbers = sensorData.some(item => typeof item === 'number' && !isNaN(item));
+  const hasNumbers = sensorValues.some(
+    item => typeof item === 'number' && !isNaN(item)
+  );
 
-    return (
-        <div className={chartContainerClassName}>
-            <div className="chart">
-                <HighchartsReact highcharts={Highcharts} options={options}
-                                 ref={chartRef}/>
-                <NoData hasNumbers={hasNumbers}/>
-            </div>
-        </div>
-    );
+  return (
+    <div className={chartContainerClassName}>
+      <div className="chart">
+        <HighchartsReact
+          highcharts={Highcharts}
+          options={options}
+        />
+        <NoData hasNumbers={hasNumbers} />
+      </div>
+    </div>
+  );
 }
 
 export default memo(Sensor);
