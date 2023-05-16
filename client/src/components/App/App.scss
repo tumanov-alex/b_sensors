@@ -23,6 +23,8 @@ body {
   .no-charts {
     height: 300px;
     display: flex;
+    justify-content: center;
+    width: 100%;
     align-items: center;
     font-size: 25px;
     color: variables.$light;
@@ -41,4 +43,10 @@ body {
 
 .highcharts-credits {
   display: none;
+}
+
+.center-container {
+  display: flex;
+  justify-content: center;
+  width: 100%;
 }
